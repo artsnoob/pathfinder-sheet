@@ -49,8 +49,15 @@
     padding:5px;text-align:center;font-family:inherit}
 
   /* Stat grid */
-  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px;margin-bottom:16px}
-  .stat{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 14px;text-align:center}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px;margin-bottom:16px;align-items:start}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 14px;text-align:center;position:relative;cursor:pointer;transition:border-color .12s}
+  .stat:hover{border-color:var(--muted)}
+  .stat::after{content:"ⓘ";position:absolute;top:6px;right:8px;font-size:10px;color:var(--dim)}
+  .stat.open::after{content:"×";color:var(--muted)}
+  .stat .bd{display:none;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);
+    font-size:11px;color:var(--muted);text-align:left;line-height:1.6;font-family:"SF Mono",ui-monospace,monospace}
+  .stat.open .bd{display:block}
+  .stat .bd b{color:var(--txt)}
   .stat .lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600}
   .stat .big{font-size:30px;font-weight:800;font-family:"SF Mono",ui-monospace,monospace;line-height:1.1;margin-top:3px}
   .stat .sub{font-size:11px;color:var(--muted);margin-top:3px}
@@ -191,15 +198,15 @@
 
 <!-- CORE / DEFENSE STATS -->
 <div class="stat-grid">
-  <div class="stat def"><div class="lbl">Armor Class</div><div class="big">22</div><div class="sub">touch 14 · flat 18</div></div>
-  <div class="stat def"><div class="lbl">Fortitude</div><div class="big">+7</div></div>
-  <div class="stat def"><div class="lbl">Reflex</div><div class="big">+6</div></div>
-  <div class="stat def"><div class="lbl">Will</div><div class="big">+4</div></div>
-  <div class="stat"><div class="lbl">Initiative</div><div class="big">+4</div></div>
-  <div class="stat"><div class="lbl">BAB</div><div class="big">+7</div><div class="sub">+7 / +2</div></div>
-  <div class="stat"><div class="lbl">CMB</div><div class="big">+10</div></div>
-  <div class="stat def"><div class="lbl">CMD</div><div class="big">24</div></div>
-  <div class="stat"><div class="lbl">Perception</div><div class="big">+8</div></div>
+  <div class="stat def" onclick="this.classList.toggle('open')"><div class="lbl">Armor Class</div><div class="big">22</div><div class="sub">touch 14 · flat 18</div><div class="bd"><b>22</b> = 10 base + 8 armor + <b>4 DEX</b><br>Touch <b>14</b> = 10 + 4 DEX (no armor)<br>Flat <b>18</b> = 10 + 8 armor (no DEX)</div></div>
+  <div class="stat def" onclick="this.classList.toggle('open')"><div class="lbl">Fortitude</div><div class="big">+7</div><div class="bd"><b>+7</b> = base 5 + CON +2</div></div>
+  <div class="stat def" onclick="this.classList.toggle('open')"><div class="lbl">Reflex</div><div class="big">+6</div><div class="bd"><b>+6</b> = base 2 + DEX +4</div></div>
+  <div class="stat def" onclick="this.classList.toggle('open')"><div class="lbl">Will</div><div class="big">+4</div><div class="bd"><b>+4</b> = base 2 + WIS +2</div></div>
+  <div class="stat" onclick="this.classList.toggle('open')"><div class="lbl">Initiative</div><div class="big">+4</div><div class="bd"><b>+4</b> = DEX +4</div></div>
+  <div class="stat" onclick="this.classList.toggle('open')"><div class="lbl">BAB</div><div class="big">+7</div><div class="sub">+7 / +2</div><div class="bd"><b>+7</b> Fighter 7<br>Iteratives: +7 / +2</div></div>
+  <div class="stat" onclick="this.classList.toggle('open')"><div class="lbl">CMB</div><div class="big">+10</div><div class="bd"><b>+10</b> = BAB 7 + STR +3 + size 0</div></div>
+  <div class="stat def" onclick="this.classList.toggle('open')"><div class="lbl">CMD</div><div class="big">24</div><div class="bd"><b>24</b> = 10 + BAB 7 + STR +3 + DEX +4 + size 0</div></div>
+  <div class="stat" onclick="this.classList.toggle('open')"><div class="lbl">Perception</div><div class="big">+8</div><div class="bd"><b>+8</b> = 6 ranks + WIS +2 (class skill)</div></div>
 </div>
 
 <!-- ABILITIES -->
