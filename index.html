@@ -139,6 +139,21 @@
     padding:3px 9px;font-size:11px;cursor:pointer;float:right;font-family:inherit}
   .gear{font-size:13px;color:#cdd6e0;white-space:pre-wrap;line-height:1.6}
 
+  /* your turn step-by-step */
+  .turn .step{display:flex;gap:13px;padding:11px 0;border-bottom:1px solid var(--line)}
+  .turn .step:last-child{border-bottom:0}
+  .turn .num{flex:0 0 30px;height:30px;border-radius:50%;background:var(--atk-bg);border:1.5px solid var(--atk);
+    color:var(--atk);font-weight:800;display:flex;align-items:center;justify-content:center;
+    font-family:"SF Mono",monospace;font-size:14px}
+  .turn .step.opt .num{background:var(--util-bg);border-color:var(--util);color:var(--util)}
+  .turn .step .t{font-weight:700;font-size:15px}
+  .turn .step .d{font-size:13px;color:var(--muted);margin-top:2px}
+  .turn .roll{font-family:"SF Mono",monospace;color:#ffd9cf;font-weight:700}
+  .turn-foot{margin-top:13px;padding:11px 13px;background:var(--good-bg);border:1px solid #1c4a2e;border-radius:9px;font-size:13.5px}
+  .turn-foot b{color:var(--good)}
+  .turn-alt{margin-top:10px;font-size:12.5px;color:var(--muted);line-height:1.8}
+  .turn-alt b{color:var(--txt)}
+
   /* floating result bar (mobile) */
   #resultBar{position:fixed;left:10px;right:10px;bottom:10px;z-index:50;
     background:#0a0d12;border:1px solid var(--atk);border-radius:12px;padding:13px 15px;
@@ -200,6 +215,46 @@
 <div class="cols">
   <!-- LEFT: main content -->
   <div>
+    <!-- YOUR TURN STEP BY STEP -->
+    <div class="section">
+      <h2>▶ Your Turn — Step by Step <span style="color:var(--dim);text-transform:none;letter-spacing:0">· standing in reach</span></h2>
+      <div class="turn">
+        <div class="step opt">
+          <div class="num">0</div>
+          <div>
+            <div class="t">Declare Power Attack</div>
+            <div class="d">Before any roll. Two-handed: <span class="roll">−2 to hit, +6 dmg</span>. Furious Focus cancels the −2 on swing 1 only.</div>
+          </div>
+        </div>
+        <div class="step opt">
+          <div class="num">1</div>
+          <div>
+            <div class="t">5-ft step (optional)</div>
+            <div class="d">Put the enemy in your 10-ft reach band. A full attack lets you move only this 5 ft — no normal move.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <div>
+            <div class="t">Swing 1 — <span class="roll">+12 to hit</span></div>
+            <div class="d">d20+12 vs AC · hit = <span class="roll">2d4+13</span> · nat 20 → ×3 crit. (Furious Focus = no penalty.)</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <div>
+            <div class="t">Swing 2 — <span class="roll">+5 to hit</span></div>
+            <div class="d">Iterative at BAB −5, and the −2 PA penalty applies here. d20+5 vs AC · hit = <span class="roll">2d4+13</span> · ×3 crit.</div>
+          </div>
+        </div>
+      </div>
+      <div class="turn-foot"><b>~36 dmg</b> if both land (18 avg each). Tap the green <b>Full Attack + Power Attack</b> card below to roll both swings at once.</div>
+      <div class="turn-alt">
+        <b>Moved more than 5 ft?</b> → Standard Attack + Power Attack: one swing at +12 for 2d4+13.<br>
+        <b>Enemy walks past you (their turn)?</b> → Attack of Opportunity at +12 for 2d4+7, up to 5/round.
+      </div>
+    </div>
+
     <!-- ATTACK CHEATSHEET -->
     <div class="section">
       <h2>⚔ Attack Cheatsheet — Cold Iron Ranseur +1 <span style="color:var(--dim);text-transform:none;letter-spacing:0">(2d4 ×3, two-handed, reach, disarm)</span></h2>
