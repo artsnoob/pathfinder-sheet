@@ -15,10 +15,12 @@
     --crit:#d264ff;
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  html,body{overflow-x:hidden;max-width:100%}
   body{
     background:var(--bg); color:var(--txt);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     line-height:1.45; padding:20px; max-width:1280px; margin:0 auto;
+    overflow-wrap:break-word;
   }
   .mono{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
   h2{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;font-weight:600}
@@ -63,7 +65,14 @@
 
   /* Layout columns */
   .cols{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
-  @media(max-width:900px){.cols{grid-template-columns:1fr}.abil-row{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:900px){
+    body{padding:12px}
+    .cols{grid-template-columns:1fr}
+    .abil-row{grid-template-columns:repeat(3,1fr)}
+    header{padding:16px}
+    .hp{min-width:0;width:100%}
+    .skills{grid-template-columns:1fr}
+  }
 
   .section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
 
