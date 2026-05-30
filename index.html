@@ -146,6 +146,28 @@
     padding:3px 9px;font-size:11px;cursor:pointer;float:right;font-family:inherit}
   .gear{font-size:13px;color:#cdd6e0;white-space:pre-wrap;line-height:1.6}
 
+  /* inventory — grouped by combat usefulness */
+  .inv-group{margin-bottom:14px;padding:9px 0 9px 12px;border-left:3px solid var(--line);background:rgba(255,255,255,.012);border-radius:0 8px 8px 0}
+  .inv-group:last-child{margin-bottom:0}
+  .inv-group.ready{border-left-color:var(--good)}
+  .inv-group.wpn{border-left-color:var(--atk)}
+  .inv-group.worn{border-left-color:var(--def)}
+  .inv-group.util{border-left-color:var(--util)}
+  .inv-group.dead{border-left-color:var(--dim)}
+  .inv-group.stash{border-left-color:var(--crit)}
+  .inv-h{font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;margin-bottom:6px;color:var(--muted)}
+  .inv-group.ready .inv-h{color:var(--good)}
+  .inv-group.wpn .inv-h{color:var(--atk)}
+  .inv-group.worn .inv-h{color:var(--def)}
+  .inv-group.util .inv-h{color:var(--util)}
+  .inv-group.stash .inv-h{color:var(--crit)}
+  .inv-list .it{display:block;font-size:13px;color:#cdd6e0;padding:2.5px 0;line-height:1.5}
+  .inv-list .nm{font-weight:600;color:#e6edf3}
+  .inv-list .q{font-family:"SF Mono",ui-monospace,monospace;color:var(--util);font-weight:700;margin-right:4px}
+  .inv-list .x{color:var(--muted);font-size:12px}
+  .inv-group.dead .inv-list .it,.inv-group.dead .inv-list .nm{color:var(--dim)}
+  .inv-foot{font-size:11.5px;color:var(--dim);margin-top:4px;font-style:italic}
+
   /* your turn step-by-step */
   .turn .step{display:flex;gap:13px;padding:11px 0;border-bottom:1px solid var(--line)}
   .turn .step:last-child{border-bottom:0}
@@ -340,14 +362,79 @@
       </div>
     </div>
 
-    <!-- GEAR -->
+    <!-- INVENTORY -->
     <div class="section">
-      <h2>🎒 Notable Gear</h2>
-      <div class="gear">Cold Iron Ranseur +1 · Guisarme +1 · Mwk Composite Longbow +1
-Breastplate · Buckler +1 · (also: Full Plate, Heavy Steel Shield, Studded Leather +1)
-6× Cure Light Wounds potion · Potion of Rage · Potion of Displacement
-Amulet of Mighty Fists · Everburning Torch · Frostspore poison ×6 · Acid flask ×4
-Coin: 411 gp on hand (+ stash: 91 pp, 1698 gp, 2000 sp)</div>
+      <h2>🎒 Inventory <span style="color:var(--dim);text-transform:none;letter-spacing:0">· sorted by combat usefulness — green = grab it mid-fight</span></h2>
+
+      <div class="inv-group ready">
+        <div class="inv-h">🟢 Combat consumables — grab these mid-fight</div>
+        <div class="inv-list">
+          <span class="it"><span class="q">6×</span><span class="nm">Cure Light Wounds potion</span> <span class="x">— 1d8+1 heal, standard action. Your emergency button.</span></span>
+          <span class="it"><span class="q">1×</span><span class="nm">Potion of Rage</span> <span class="x">— +2 Str/+2 Con/+1 Will, −2 AC, 3 rds. Pop before a hard fight.</span></span>
+          <span class="it"><span class="q">1×</span><span class="nm">Potion of Displacement</span> <span class="x">— 50% miss chance vs attacks. Defensive panic button.</span></span>
+          <span class="it"><span class="q">4×</span><span class="nm">Acid flask</span> <span class="x">— thrown 1d6+1 splash. Reaches the adjacent foes your polearm can't.</span></span>
+          <span class="it"><span class="q">6×</span><span class="nm">Frostspore poison</span> <span class="x">— coat the ranseur before a fight.</span></span>
+        </div>
+      </div>
+
+      <div class="inv-group wpn">
+        <div class="inv-h">⚔️ Weapons</div>
+        <div class="inv-list">
+          <span class="it"><span class="nm">Cold Iron Ranseur +1</span> <span class="x">— PRIMARY. 2d4, ×3, reach, disarm. +15 / 2d4+17 w/ PA.</span></span>
+          <span class="it"><span class="nm">Guisarme +1</span> <span class="x">— trip polearm. ~+13 / 2d4+6 (no Focus/Spec, but Weapon Training applies). Use to TRIP.</span></span>
+          <span class="it"><span class="nm">Mwk Composite Longbow +1</span> <span class="x">— ranged option; buckler lets you fire it with no penalty.</span></span>
+          <span class="it"><span class="nm">Masterwork Longsword</span> <span class="x">— one-handed backup melee.</span></span>
+        </div>
+      </div>
+
+      <div class="inv-group worn">
+        <div class="inv-h">🛡️ Worn</div>
+        <div class="inv-list">
+          <span class="it"><span class="nm">Breastplate</span> <span class="x">— worn. +6 armor, and Armor Training lets your full +5 Dex through.</span></span>
+          <span class="it"><span class="nm">Buckler +1</span> <span class="x">— worn. +2 AC, still lets you two-hand the ranseur / fire the bow.</span></span>
+        </div>
+      </div>
+
+      <div class="inv-group util">
+        <div class="inv-h">🔆 Utility</div>
+        <div class="inv-list">
+          <span class="it"><span class="nm">Everburning Torch</span> <span class="x">— permanent light, no fire in hand.</span></span>
+          <span class="it"><span class="nm">Large Tent</span> · <span class="nm">Silver Briefcase</span> · <span class="nm">Wet Torch</span> <span class="x">(useless till dry)</span></span>
+          <span class="it"><span class="nm">Cyttalish extract ×1</span> <span class="x">— unidentified; ID it, might be a drinkable buff.</span></span>
+        </div>
+      </div>
+
+      <div class="inv-group dead">
+        <div class="inv-h">⚠️ Not useful for you — sell / stash</div>
+        <div class="inv-list">
+          <span class="it"><span class="nm">Amulet of Mighty Fists</span> <span class="x">— only boosts UNARMED / natural attacks. Does nothing for the ranseur. Trade it.</span></span>
+          <span class="it"><span class="nm">Full Plate</span> <span class="x">— Max Dex +1 would LOWER your AC vs the breastplate.</span></span>
+          <span class="it"><span class="nm">Heavy Steel Shield ×3</span> <span class="x">— can't use a shield while two-handing the polearm.</span></span>
+          <span class="it"><span class="nm">Studded Leather +1</span> · <span class="nm">Mwk Leather</span> · <span class="nm">Rosewood Armor</span> · <span class="nm">spare Breastplate</span></span>
+        </div>
+      </div>
+
+      <div class="inv-group dead">
+        <div class="inv-h">🗑️ Loot to sell</div>
+        <div class="inv-list">
+          <span class="it">Torag bundle (192 gp) · Golden Ring (250 gp) · Silver Necklace (100 gp) · Dire wolf skin</span>
+          <span class="it">Tiny teeth ×27 · Polished Rocks (B45) ×3 · 3× half-barrel mead · 4× keg PPP</span>
+        </div>
+      </div>
+
+      <div class="inv-group worn">
+        <div class="inv-h">💰 Coin on hand</div>
+        <div class="inv-list"><span class="it"><span class="q">411 gp</span><span class="x">carried</span></span></div>
+      </div>
+
+      <div class="inv-group stash">
+        <div class="inv-h">📦 Stash — Puff Puff Pelican <span style="font-weight:400;text-transform:none">(not carried)</span></div>
+        <div class="inv-list">
+          <span class="it"><span class="q">91 pp · 2115 gp · 2000 sp</span></span>
+          <span class="it">Silver Crown (800 gp) · Super-Duper Expensive Fabric (wall mount)</span>
+        </div>
+        <div class="inv-foot">Separate off-character stash — kept out of your carried gold.</div>
+      </div>
     </div>
   </div>
 
