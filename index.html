@@ -129,6 +129,16 @@
   .clearbtn{background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;
     padding:3px 9px;font-size:11px;cursor:pointer;float:right;font-family:inherit}
   .gear{font-size:13px;color:#cdd6e0;white-space:pre-wrap;line-height:1.6}
+
+  /* floating result bar (mobile) */
+  #resultBar{position:fixed;left:10px;right:10px;bottom:10px;z-index:50;
+    background:#0a0d12;border:1px solid var(--atk);border-radius:12px;padding:13px 15px;
+    font-family:"SF Mono",ui-monospace,monospace;font-size:14px;
+    box-shadow:0 10px 36px rgba(0,0,0,.65);transform:translateY(170%);
+    transition:transform .25s ease;display:none}
+  #resultBar.show{transform:translateY(0)}
+  #resultBar .closehint{display:block;text-align:center;color:var(--muted);font-size:10px;margin-top:8px;letter-spacing:.5px}
+  @media(max-width:900px){#resultBar{display:block}}
 </style>
 </head>
 <body>
@@ -345,6 +355,12 @@ function logHTML(html){
   e.className='log-entry';
   e.innerHTML=html;
   log.prepend(e);
+  // mirror latest roll into the floating bar (visible on mobile)
+  const rb=document.getElementById('resultBar');
+  if(rb){
+    rb.innerHTML=html+'<span class="closehint">tap to dismiss</span>';
+    rb.classList.add('show');
+  }
 }
 
 function rollAttack(a){
@@ -392,5 +408,7 @@ function hp(delta){setHP(getHP()+ +delta)}
 function hpfull(){setHP(MAXHP)}
 setHP(getHP());
 </script>
+
+<div id="resultBar" onclick="this.classList.remove('show')"></div>
 </body>
 </html>
