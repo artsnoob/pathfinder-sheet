@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milan — Fighter 7 | Combat Cheatsheet</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --line:#2a3140;
+    --txt:#e6edf3; --muted:#8b97a7; --dim:#5b6678;
+    --atk:#f4543b; --atk-bg:#2a1512;
+    --def:#4aa3ff; --def-bg:#0f2030;
+    --util:#f5b942; --util-bg:#2a2210;
+    --good:#3fb950; --good-bg:#10251a;
+    --crit:#d264ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.45; padding:20px; max-width:1280px; margin:0 auto;
+  }
+  .mono{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;font-weight:600}
+  a{color:var(--def)}
+
+  /* Header */
+  header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 24px;margin-bottom:16px}
+  .name{font-size:32px;font-weight:800;letter-spacing:-.5px}
+  .subtitle{color:var(--muted);font-size:14px;margin-top:2px}
+  .tag{display:inline-block;background:var(--atk-bg);color:var(--atk);border:1px solid var(--atk);
+    border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle;margin-left:8px}
+
+  /* HP tracker */
+  .hp{min-width:280px}
+  .hp-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .hp-val{font-size:28px;font-weight:800;font-family:"SF Mono",ui-monospace,monospace}
+  .hp-val small{font-size:15px;color:var(--muted);font-weight:600}
+  .hp-bar{height:10px;background:#30181a;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+  .hp-fill{height:100%;background:linear-gradient(90deg,#f4543b,#ff8a5c);transition:width .25s}
+  .hp-btns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+  .hp-btns button{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:7px;
+    padding:5px 11px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+  .hp-btns button:hover{border-color:var(--muted)}
+  .hp-btns input{width:46px;background:#0d1117;border:1px solid var(--line);border-radius:7px;color:var(--txt);
+    padding:5px;text-align:center;font-family:inherit}
+
+  /* Stat grid */
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px;margin-bottom:16px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 14px;text-align:center}
+  .stat .lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600}
+  .stat .big{font-size:30px;font-weight:800;font-family:"SF Mono",ui-monospace,monospace;line-height:1.1;margin-top:3px}
+  .stat .sub{font-size:11px;color:var(--muted);margin-top:3px}
+  .stat.def .big{color:var(--def)}
+
+  /* Abilities */
+  .abil-row{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px}
+  .abil{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:12px;text-align:center}
+  .abil .nm{font-size:11px;letter-spacing:1px;color:var(--muted);font-weight:700}
+  .abil .mod{font-size:26px;font-weight:800;font-family:"SF Mono",ui-monospace,monospace}
+  .abil .score{font-size:12px;color:var(--muted)}
+
+  /* Layout columns */
+  .cols{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
+  @media(max-width:900px){.cols{grid-template-columns:1fr}.abil-row{grid-template-columns:repeat(3,1fr)}}
+
+  .section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+
+  /* Attack cards */
+  .atk-card{background:var(--atk-bg);border:1px solid #44211c;border-left:4px solid var(--atk);
+    border-radius:10px;padding:13px 15px;margin-bottom:10px;cursor:pointer;transition:transform .08s,border-color .15s}
+  .atk-card:hover{border-color:var(--atk);transform:translateX(2px)}
+  .atk-card:active{transform:scale(.99)}
+  .atk-card.rec{border-left-color:var(--good);background:linear-gradient(90deg,var(--good-bg),var(--atk-bg))}
+  .atk-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .atk-name{font-size:16px;font-weight:700}
+  .atk-rec{font-size:10px;background:var(--good);color:#06140b;border-radius:4px;padding:1px 6px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+  .atk-stats{font-family:"SF Mono",ui-monospace,monospace;font-size:15px;margin-top:5px;color:#ffd9cf}
+  .atk-stats b{color:#fff}
+  .atk-note{font-size:12px;color:var(--muted);margin-top:5px}
+  .roll-hint{font-size:11px;color:var(--atk);opacity:.7;float:right}
+
+  /* utility / maneuvers */
+  .util-card{background:var(--util-bg);border:1px solid #4a3c18;border-left:4px solid var(--util);
+    border-radius:10px;padding:11px 14px;margin-bottom:9px;cursor:pointer}
+  .util-card:hover{border-color:var(--util)}
+  .util-card .nm{font-weight:700;font-size:15px}
+  .util-card .ds{font-size:13px;color:var(--muted);margin-top:3px;font-family:"SF Mono",monospace}
+
+  /* decision guide */
+  .guide li{list-style:none;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .guide li:last-child{border:0}
+  .guide .when{color:var(--util);font-weight:600}
+  .guide .do{color:var(--txt)}
+
+  /* reminders */
+  .rem li{list-style:none;padding:7px 0 7px 26px;position:relative;font-size:13.5px;color:#cdd6e0}
+  .rem li::before{content:"▸";position:absolute;left:6px;color:var(--atk)}
+  .rem b{color:#fff}
+
+  /* feats / skills */
+  details{border-bottom:1px solid var(--line);padding:8px 0}
+  details summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;justify-content:space-between}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";color:var(--muted)}
+  details[open] summary::after{content:"–"}
+  details p{font-size:13px;color:var(--muted);margin-top:7px;white-space:pre-wrap}
+  .skills{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
+  .skills .sk{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .skills .sk .v{font-family:"SF Mono",monospace;font-weight:700}
+  .skills .sk .cls{color:var(--util);font-size:10px;margin-left:6px}
+
+  /* roll log (sticky) */
+  .log-wrap{position:sticky;top:20px}
+  #log{background:#0a0d12;border:1px solid var(--line);border-radius:11px;padding:14px;min-height:120px;
+    max-height:70vh;overflow-y:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:13px}
+  .log-entry{border-bottom:1px dashed var(--line);padding:8px 0;animation:flash .4s}
+  .log-entry:first-child{padding-top:0}
+  @keyframes flash{from{background:#1a2535}to{background:transparent}}
+  .log-entry .lt{color:var(--util);font-weight:700;font-size:12px}
+  .log-entry .swing{margin-top:3px}
+  .d20{font-weight:800;color:var(--def)}
+  .d20.nat20{color:var(--crit)} .d20.nat1{color:var(--atk)}
+  .tot{color:#fff;font-weight:800}
+  .dmg{color:#ffb3a3}
+  .crit-tag{color:var(--crit);font-weight:800}
+  .empty{color:var(--dim);font-size:12px;text-align:center;padding:20px 0}
+  .clearbtn{background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;
+    padding:3px 9px;font-size:11px;cursor:pointer;float:right;font-family:inherit}
+  .gear{font-size:13px;color:#cdd6e0;white-space:pre-wrap;line-height:1.6}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="name">Milan <span class="tag">Fighter 7</span></div>
+    <div class="subtitle">Azlanti Human · Chaotic Neutral · Medium · 10&nbsp;ft reach · Speed 30&nbsp;ft <span style="opacity:.6">(20 ft in breastplate)</span></div>
+  </div>
+  <div class="hp">
+    <div class="hp-top">
+      <span style="font-size:11px;letter-spacing:1px;color:var(--muted);font-weight:700">HIT POINTS</span>
+      <span class="hp-val"><span id="hpcur">53</span><small> / 53</small></span>
+    </div>
+    <div class="hp-bar"><div class="hp-fill" id="hpfill" style="width:100%"></div></div>
+    <div class="hp-btns">
+      <button onclick="hp(-1)">–1</button>
+      <button onclick="hp(-5)">–5</button>
+      <input id="hpamt" type="number" value="5" min="1">
+      <button onclick="hp(-document.getElementById('hpamt').value)">Damage</button>
+      <button onclick="hp(+document.getElementById('hpamt').value)">Heal</button>
+      <button onclick="hpfull()">Full</button>
+    </div>
+  </div>
+</header>
+
+<!-- CORE / DEFENSE STATS -->
+<div class="stat-grid">
+  <div class="stat def"><div class="lbl">Armor Class</div><div class="big">22</div><div class="sub">touch 14 · flat 18</div></div>
+  <div class="stat def"><div class="lbl">Fortitude</div><div class="big">+7</div></div>
+  <div class="stat def"><div class="lbl">Reflex</div><div class="big">+6</div></div>
+  <div class="stat def"><div class="lbl">Will</div><div class="big">+4</div></div>
+  <div class="stat"><div class="lbl">Initiative</div><div class="big">+4</div></div>
+  <div class="stat"><div class="lbl">BAB</div><div class="big">+7</div><div class="sub">+7 / +2</div></div>
+  <div class="stat"><div class="lbl">CMB</div><div class="big">+10</div></div>
+  <div class="stat def"><div class="lbl">CMD</div><div class="big">24</div></div>
+  <div class="stat"><div class="lbl">Perception</div><div class="big">+8</div></div>
+</div>
+
+<!-- ABILITIES -->
+<div class="abil-row">
+  <div class="abil"><div class="nm">STR</div><div class="mod">+3</div><div class="score">16</div></div>
+  <div class="abil"><div class="nm">DEX</div><div class="mod">+4</div><div class="score">19</div></div>
+  <div class="abil"><div class="nm">CON</div><div class="mod">+2</div><div class="score">15</div></div>
+  <div class="abil"><div class="nm">INT</div><div class="mod">+0</div><div class="score">10</div></div>
+  <div class="abil"><div class="nm">WIS</div><div class="mod">+2</div><div class="score">15</div></div>
+  <div class="abil"><div class="nm">CHA</div><div class="mod">+1</div><div class="score">12</div></div>
+</div>
+
+<div class="cols">
+  <!-- LEFT: main content -->
+  <div>
+    <!-- ATTACK CHEATSHEET -->
+    <div class="section">
+      <h2>⚔ Attack Cheatsheet — Cold Iron Ranseur +1 <span style="color:var(--dim);text-transform:none;letter-spacing:0">(2d4 ×3, two-handed, reach, disarm)</span></h2>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Click any attack to roll it. <span class="mono">+12 to hit</span> = BAB&nbsp;7 + STR&nbsp;3 + enh&nbsp;1 + Weapon&nbsp;Focus&nbsp;1. Power Attack: <span class="mono">+6 dmg</span> (two-handed), <span class="mono">–2</span> to hit (negated on 1st attack by Furious Focus).</p>
+      <div id="attacks"></div>
+    </div>
+
+    <!-- DECISION GUIDE -->
+    <div class="section">
+      <h2>🧭 What To Use When</h2>
+      <ul class="guide">
+        <li><span class="when">Standing still, enemy in reach →</span> <span class="do"><b>Full Attack + Power Attack.</b> +12 then +5, both 2d4+13. Your bread &amp; butter.</span></li>
+        <li><span class="when">Had to move this turn →</span> <span class="do"><b>Standard + Power Attack.</b> +12 for 2d4+13 (Furious Focus = no penalty).</span></li>
+        <li><span class="when">Enemy approaching →</span> <span class="do">Let them eat an <b>AoO at 10 ft</b>: +12 for 2d4+7. You get 5 per round.</span></li>
+        <li><span class="when">Two enemies adjacent to each other →</span> <span class="do"><b>Cleave</b> — hit one, free swing on its neighbor (–2 AC till next turn).</span></li>
+        <li><span class="when">Need to shut down a big threat →</span> <span class="do"><b>Dazing Assault</b> — –5 to hit, but a hit dazes for 1 round (Fort DC 17).</span></li>
+        <li><span class="when">Enemy with a nasty weapon →</span> <span class="do"><b>Disarm</b> with the ranseur: CMB +12 (+2 from ranseur) vs their CMD.</span></li>
+      </ul>
+    </div>
+
+    <!-- COMBAT MANEUVERS / ALT -->
+    <div class="section">
+      <h2>🌀 Maneuvers &amp; Other Weapons</h2>
+      <div class="util-card" onclick="rollManeuver('Disarm (Ranseur +2)',14)">
+        <div class="nm">Disarm <span class="roll-hint" style="color:var(--util)">click to roll →</span></div>
+        <div class="ds">CMB +12 +2 (ranseur) = <b>+14</b> vs target CMD</div>
+      </div>
+      <div class="util-card" onclick="rollManeuver('Trip (Guisarme)',10)">
+        <div class="nm">Trip — switch to Guisarme +1</div>
+        <div class="ds">CMB <b>+10</b> vs CMD · guisarme also has reach &amp; trip</div>
+      </div>
+      <div class="util-card" onclick="rollManeuver('Sunder / Bull Rush / Grapple',10)">
+        <div class="nm">Other maneuvers</div>
+        <div class="ds">CMB <b>+10</b> vs target CMD</div>
+      </div>
+      <div class="atk-card" style="margin-top:10px" onclick="rollAttack({name:'Guisarme +1',swings:[12],dice:'2d4',bonus:7,crit:3})">
+        <div class="atk-head"><span class="atk-name">Guisarme +1 (trip polearm) <span class="roll-hint">click to roll →</span></span></div>
+        <div class="atk-stats"><b>+12</b> to hit · <b>2d4+7</b> slashing · ×3 · reach, trip</div>
+      </div>
+    </div>
+
+    <!-- REMINDERS -->
+    <div class="section">
+      <h2>📌 Don't Forget</h2>
+      <ul class="rem">
+        <li>You have <b>10 ft reach</b> — you threaten enemies <b>10 ft away, not adjacent</b>. Hitting an adjacent foe takes a –4 (improvised) penalty.</li>
+        <li><b>5 attacks of opportunity</b> per round (Combat Reflexes + DEX 4). Punish anyone moving past you — even while flat-footed.</li>
+        <li><b>Cold iron</b> weapon — bypasses DR on fey and demons.</li>
+        <li><b>Furious Focus</b> only negates the Power Attack penalty on your <b>first</b> attack each turn.</li>
+        <li><b>Bodyguard:</b> spend an AoO to give an adjacent ally +2 AC (aid another).</li>
+        <li>Default round: <b>Full Attack + Power Attack</b> → +12 / +5, both 2d4+13.</li>
+      </ul>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="section">
+      <h2>🎯 Skills</h2>
+      <div class="skills">
+        <div class="sk"><span>Perception <span class="cls">class</span></span><span class="v">+8</span></div>
+        <div class="sk"><span>Ride <span class="cls">class</span></span><span class="v">+8</span></div>
+        <div class="sk"><span>Climb <span class="cls">class</span></span><span class="v">+7</span></div>
+        <div class="sk"><span>Swim <span class="cls">class</span></span><span class="v">+7</span></div>
+        <div class="sk"><span>Acrobatics</span><span class="v">+6</span></div>
+        <div class="sk"><span>Survival <span class="cls">class</span></span><span class="v">+6</span></div>
+        <div class="sk"><span>Handle Animal <span class="cls">class</span></span><span class="v">+5</span></div>
+        <div class="sk"><span>Intimidate <span class="cls">class</span></span><span class="v">+5</span></div>
+      </div>
+    </div>
+
+    <!-- GEAR -->
+    <div class="section">
+      <h2>🎒 Notable Gear</h2>
+      <div class="gear">Cold Iron Ranseur +1 · Guisarme +1 · Mwk Composite Longbow +1
+Breastplate · Buckler +1 · (also: Full Plate, Heavy Steel Shield, Studded Leather +1)
+6× Cure Light Wounds potion · Potion of Rage · Potion of Displacement
+Amulet of Mighty Fists · Everburning Torch · Frostspore poison ×6 · Acid flask ×4
+Coin: 411 gp on hand (+ stash: 91 pp, 1698 gp, 2000 sp)</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: feats + roll log -->
+  <div class="log-wrap">
+    <div class="section" style="margin-bottom:16px">
+      <h2>🎲 Roll Log <button class="clearbtn" onclick="clearLog()">clear</button></h2>
+      <div id="log"><div class="empty">Click an attack or maneuver to roll…</div></div>
+    </div>
+    <div class="section">
+      <h2>🏅 Feats</h2>
+      <div id="feats"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const MAXHP = 53;
+const ATTACKS = [
+  {name:'Full Attack + Power Attack', rec:true, swings:[12,5], dice:'2d4', bonus:13, crit:3,
+   note:'1st swing +12 (Furious Focus negates penalty), 2nd swing +5. Default combat round.'},
+  {name:'Standard Attack + Power Attack', rec:false, swings:[12], dice:'2d4', bonus:13, crit:3,
+   note:'One swing when you moved this turn. Furious Focus = no –2 penalty.'},
+  {name:'Full Attack (no Power Attack)', swings:[12,7], dice:'2d4', bonus:7, crit:3,
+   note:'Safer to-hit when you really need to land both swings.'},
+  {name:'Standard Attack (no Power Attack)', swings:[12], dice:'2d4', bonus:7, crit:3,
+   note:'Single swing, max accuracy.'},
+  {name:'Attack of Opportunity', swings:[12], dice:'2d4', bonus:7, crit:3,
+   note:'Up to 5 per round. Triggered when foes move in/past your 10 ft reach.'},
+  {name:'Cleave', swings:[12,12], dice:'2d4', bonus:7, crit:3,
+   note:'Hit a foe, then free attack on an adjacent foe. –2 to your AC until next turn.'},
+  {name:'Dazing Assault + Power Attack', swings:[7], dice:'2d4', bonus:13, crit:3,
+   note:'–5 to hit. On a hit, target is dazed 1 round unless it makes Fort DC 17.'},
+];
+
+const FEATS = [
+  ['Power Attack','–1 to melee attacks/CMB for +2 damage (×1.5 = +3 with two-handed). Scales +1/+2 every 4 BAB. At your BAB +7: –2 to hit, +6 damage two-handed.'],
+  ['Furious Focus','Wielding two-handed + Power Attack: ignore the Power Attack to-hit penalty on your FIRST attack each turn. Still applies to iteratives and AoOs.'],
+  ['Weapon Focus (Ranseur)','+1 on all attack rolls with the ranseur.'],
+  ['Weapon Specialization (Ranseur)','+2 on all damage rolls with the ranseur.'],
+  ['Combat Reflexes','Extra AoOs per round = DEX bonus (4). Can make AoOs while flat-footed. Total: up to 5 AoOs/round.'],
+  ['Cleave','Standard action: attack one foe at full BAB; on a hit, attack an adjacent foe at full BAB. One extra attack/round. –2 AC until your next turn.'],
+  ['Dazing Assault','–5 to all melee attacks/CMB this turn; foes you damage are dazed 1 round (Fort save DC 10 + BAB negates).'],
+  ['Bodyguard','When an adjacent ally is attacked, use an AoO to aid another and give them +2 AC.'],
+];
+
+// ---- render ----
+const atkBox = document.getElementById('attacks');
+ATTACKS.forEach((a,i)=>{
+  const div=document.createElement('div');
+  div.className='atk-card'+(a.rec?' rec':'');
+  div.onclick=()=>rollAttack(a);
+  const swingStr=a.swings.map(s=>'+'+s).join(' / ');
+  div.innerHTML=`<div class="atk-head">
+      <span class="atk-name">${a.name}${a.rec?' <span class="atk-rec">default</span>':''}</span>
+      <span class="roll-hint">click to roll →</span></div>
+    <div class="atk-stats"><b>${swingStr}</b> to hit · <b>${a.dice}+${a.bonus}</b> · ×${a.crit}</div>
+    <div class="atk-note">${a.note}</div>`;
+  atkBox.appendChild(div);
+});
+
+const featBox=document.getElementById('feats');
+FEATS.forEach(([n,d])=>{
+  const el=document.createElement('details');
+  el.innerHTML=`<summary>${n}</summary><p>${d}</p>`;
+  featBox.appendChild(el);
+});
+
+// ---- dice ----
+const r=s=>Math.floor(Math.random()*s)+1;
+function parseDice(str){const m=str.match(/(\d+)d(\d+)/);return{n:+m[1],s:+m[2]}}
+
+function rollDamage(dice,bonus){
+  const {n,s}=parseDice(dice);
+  let rolls=[],sum=0;
+  for(let i=0;i<n;i++){const x=r(s);rolls.push(x);sum+=x}
+  return {rolls,total:sum+bonus,bonus};
+}
+
+let logEmpty=true;
+function logHTML(html){
+  const log=document.getElementById('log');
+  if(logEmpty){log.innerHTML='';logEmpty=false}
+  const e=document.createElement('div');
+  e.className='log-entry';
+  e.innerHTML=html;
+  log.prepend(e);
+}
+
+function rollAttack(a){
+  let html=`<div class="lt">${a.name}</div>`;
+  a.swings.forEach((bonus,idx)=>{
+    const d=r(20);
+    const total=d+bonus;
+    const nat = d===20?' nat20':d===1?' nat1':'';
+    let crit='';
+    if(d===20){
+      const cd=rollDamage(a.dice, a.bonus);
+      const critTotal=cd.total*a.crit;
+      crit=` <span class="crit-tag">CRIT ×${a.crit}!</span> <span class="dmg">${critTotal} dmg</span> <span style="color:var(--muted)">[${cd.rolls.join(',')}]×${a.crit}+mods</span>`;
+      html+=`<div class="swing">${a.swings.length>1?'#'+(idx+1)+' ':''}<span class="d20${nat}">d20=${d}</span> +${bonus} = <span class="tot">${total}</span> to hit${crit}</div>`;
+    } else {
+      const dm=rollDamage(a.dice,a.bonus);
+      const dmgStr = d===1 ? '<span class="crit-tag" style="color:var(--atk)">NAT 1 — miss!</span>'
+        : `<span class="dmg">${dm.total} dmg</span> <span style="color:var(--muted)">[${dm.rolls.join(',')}]+${dm.bonus}</span>`;
+      html+=`<div class="swing">${a.swings.length>1?'#'+(idx+1)+' ':''}<span class="d20${nat}">d20=${d}</span> +${bonus} = <span class="tot">${total}</span> to hit · ${dmgStr}</div>`;
+    }
+  });
+  logHTML(html);
+}
+
+function rollManeuver(name,bonus){
+  const d=r(20);
+  const nat=d===20?' nat20':d===1?' nat1':'';
+  logHTML(`<div class="lt">${name}</div><div class="swing"><span class="d20${nat}">d20=${d}</span> +${bonus} = <span class="tot">${d+bonus}</span> CMB vs CMD</div>`);
+}
+
+function clearLog(){
+  document.getElementById('log').innerHTML='<div class="empty">Click an attack or maneuver to roll…</div>';
+  logEmpty=true;
+}
+
+// ---- HP tracker (localStorage) ----
+function getHP(){const v=localStorage.getItem('milan-hp');return v===null?MAXHP:Math.max(0,Math.min(MAXHP,+v))}
+function setHP(v){
+  v=Math.max(0,Math.min(MAXHP,Math.round(v)));
+  localStorage.setItem('milan-hp',v);
+  document.getElementById('hpcur').textContent=v;
+  document.getElementById('hpfill').style.width=(v/MAXHP*100)+'%';
+}
+function hp(delta){setHP(getHP()+ +delta)}
+function hpfull(){setHP(MAXHP)}
+setHP(getHP());
+</script>
+</body>
+</html>
