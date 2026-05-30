@@ -279,7 +279,7 @@
         <li><span class="when">Enemy just out of reach (11–15 ft) →</span> <span class="do"><b>Lunge</b> — take –2 AC to extend your reach to 15 ft and still attack this turn.</span></li>
         <li><span class="when">Enemy approaching →</span> <span class="do">Let them eat an <b>AoO at 10 ft</b>: +15 for 2d4+8. You get 6 per round.</span></li>
         <li><span class="when">Two enemies adjacent to each other →</span> <span class="do"><b>Cleave</b> — hit one, free swing on its neighbor (–2 AC till next turn).</span></li>
-        <li><span class="when">Need to shut down a big threat →</span> <span class="do"><b>Dazing Assault</b> — –5 to hit, but a hit dazes for 1 round (Fort DC 18).</span></li>
+        <li><span class="when">Foe trying to run past you →</span> <span class="do"><b>Stand Still</b> — spend an AoO to make a CMB check (+11) instead of a hit; on a success it can't move for the rest of its turn.</span></li>
         <li><span class="when">Enemy with a nasty weapon →</span> <span class="do"><b>Disarm</b> with the ranseur: CMB +14 (+2 ranseur, +1 training) vs their CMD.</span></li>
       </ul>
     </div>
@@ -299,6 +299,10 @@
         <div class="nm">Other maneuvers</div>
         <div class="ds">CMB <b>+11</b> vs target CMD (+1 if made with a polearm)</div>
       </div>
+      <div class="util-card" onclick="rollManeuver('Stand Still',11)">
+        <div class="nm">Stand Still <span class="roll-hint" style="color:var(--util)">click to roll →</span></div>
+        <div class="ds">Foe moves through your reach? Spend an AoO: CMB <b>+11</b> vs CMD — on a hit it <b>can't move</b> the rest of its turn (5-ft steps still allowed)</div>
+      </div>
       <div class="atk-card" style="margin-top:10px" onclick="rollAttack({name:'Guisarme +1',swings:[13],dice:'2d4',bonus:6,crit:3})">
         <div class="atk-head"><span class="atk-name">Guisarme +1 (trip polearm) <span class="roll-hint">click to roll →</span></span></div>
         <div class="atk-stats"><b>+13</b> to hit · <b>2d4+6</b> slashing · ×3 · reach, trip</div>
@@ -313,6 +317,7 @@
         <li>You have <b>10 ft reach</b> — you threaten enemies <b>10 ft away, not adjacent</b>. Hitting an adjacent foe takes a –4 (improvised) penalty.</li>
         <li><b>Lunge:</b> no action — just declare it before your attacks. Reach becomes <b>15 ft for that turn</b> at the cost of <b>–2 AC until your next turn</b>. Only on <b>your</b> turn — it does <b>not</b> extend AoO reach on enemies' turns.</li>
         <li><b>6 attacks of opportunity</b> per round (Combat Reflexes + DEX 5). Punish anyone moving past you — even while flat-footed.</li>
+        <li><b>Stand Still:</b> instead of an AoO's damage, make a CMB check (+11) to stop a moving foe dead — it can't move for the rest of its turn (5-ft steps still allowed).</li>
         <li><b>Cold iron</b> weapon — bypasses DR on fey and demons.</li>
         <li><b>Furious Focus</b> only negates the Power Attack penalty on your <b>first</b> attack each turn.</li>
         <li><b>Bodyguard:</b> spend an AoO to give an adjacent ally +2 AC (aid another).</li>
@@ -374,8 +379,6 @@ const ATTACKS = [
    note:'Up to 6 per round. Triggered when foes move in/past your 10 ft reach. Lunge does not extend AoO reach on enemy turns.'},
   {name:'Cleave', swings:[15,15], dice:'2d4', bonus:8, crit:3,
    note:'Hit a foe, then free attack on an adjacent foe. –2 to your AC until next turn.'},
-  {name:'Dazing Assault + Power Attack', swings:[10], dice:'2d4', bonus:17, crit:3,
-   note:'–5 to hit. On a hit, target is dazed 1 round unless it makes Fort DC 18.'},
 ];
 
 const FEATS = [
@@ -388,7 +391,7 @@ const FEATS = [
   ['Lunge','No action — decide before any attack. Take –2 AC until your next turn to add +5 ft reach (10 → 15 ft) until the end of your turn. Only helps attacks on your own turn, not AoOs on enemy turns. Taken this level.'],
   ['Combat Reflexes','Extra AoOs per round = DEX bonus (5). Can make AoOs while flat-footed. Total: up to 6 AoOs/round.'],
   ['Cleave','Standard action: attack one foe at full BAB; on a hit, attack an adjacent foe at full BAB. One extra attack/round. –2 AC until your next turn.'],
-  ['Dazing Assault','–5 to all melee attacks/CMB this turn; foes you damage are dazed 1 round (Fort save DC 10 + BAB = 18 negates).'],
+  ['Stand Still','When a foe provokes an AoO by moving, make a CMB check (+11) instead of an attack; on a success it can\'t move for the rest of its turn (5-ft steps still allowed). Requires Combat Reflexes. Taken this level.'],
   ['Bodyguard','When an adjacent ally is attacked, use an AoO to aid another and give them +2 AC.'],
 ];
 
