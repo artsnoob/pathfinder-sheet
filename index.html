@@ -311,7 +311,7 @@
       <h2>📌 Don't Forget</h2>
       <ul class="rem">
         <li>You have <b>10 ft reach</b> — you threaten enemies <b>10 ft away, not adjacent</b>. Hitting an adjacent foe takes a –4 (improvised) penalty.</li>
-        <li><b>Lunge:</b> standard action, –2 AC until your next turn → reach becomes <b>15 ft</b>. Declare before attacking.</li>
+        <li><b>Lunge:</b> no action — just declare it before your attacks. Reach becomes <b>15 ft for that turn</b> at the cost of <b>–2 AC until your next turn</b>. Only on <b>your</b> turn — it does <b>not</b> extend AoO reach on enemies' turns.</li>
         <li><b>6 attacks of opportunity</b> per round (Combat Reflexes + DEX 5). Punish anyone moving past you — even while flat-footed.</li>
         <li><b>Cold iron</b> weapon — bypasses DR on fey and demons.</li>
         <li><b>Furious Focus</b> only negates the Power Attack penalty on your <b>first</b> attack each turn.</li>
@@ -371,7 +371,7 @@ const ATTACKS = [
   {name:'Standard Attack (no Power Attack)', swings:[15], dice:'2d4', bonus:8, crit:3,
    note:'Single swing, max accuracy.'},
   {name:'Attack of Opportunity', swings:[15], dice:'2d4', bonus:8, crit:3,
-   note:'Up to 6 per round. Triggered when foes move in/past your 10 ft reach (15 ft with Lunge active).'},
+   note:'Up to 6 per round. Triggered when foes move in/past your 10 ft reach. Lunge does not extend AoO reach on enemy turns.'},
   {name:'Cleave', swings:[15,15], dice:'2d4', bonus:8, crit:3,
    note:'Hit a foe, then free attack on an adjacent foe. –2 to your AC until next turn.'},
   {name:'Dazing Assault + Power Attack', swings:[10], dice:'2d4', bonus:17, crit:3,
@@ -385,7 +385,7 @@ const FEATS = [
   ['Greater Weapon Focus (Ranseur)','Another +1 on all attack rolls with the ranseur (stacks with Weapon Focus). Requires fighter level 8 — taken this level.'],
   ['Weapon Specialization (Ranseur)','+2 on all damage rolls with the ranseur.'],
   ['Weapon Training: Polearms (+1)','Class feature. +1 attack and +1 damage with every polearm (ranseur, guisarme), and +1 to combat maneuvers made with them.'],
-  ['Lunge','Standard action: take –2 AC until your next turn to add +5 ft reach (10 → 15 ft) for the turn. Decide before any attacks. Taken this level.'],
+  ['Lunge','No action — decide before any attack. Take –2 AC until your next turn to add +5 ft reach (10 → 15 ft) until the end of your turn. Only helps attacks on your own turn, not AoOs on enemy turns. Taken this level.'],
   ['Combat Reflexes','Extra AoOs per round = DEX bonus (5). Can make AoOs while flat-footed. Total: up to 6 AoOs/round.'],
   ['Cleave','Standard action: attack one foe at full BAB; on a hit, attack an adjacent foe at full BAB. One extra attack/round. –2 AC until your next turn.'],
   ['Dazing Assault','–5 to all melee attacks/CMB this turn; foes you damage are dazed 1 round (Fort save DC 10 + BAB = 18 negates).'],
